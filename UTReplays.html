@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Chatouille">
+<title>UT Replays</title>
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+body {
+	background-color: #eee;
+	padding: 1em;
+}
+table {
+	border: 2px solid #888;
+	border-collapse: collapse;
+	font-family: Monaco, DejaVu Sans Mono, Lucida Console, Andale Mono, monospace;
+}
+td, th {
+	border: 1px solid #bbb;
+	padding: 0.2em 0.6rem;
+}
+th { font-size: 120%; }
+
+th:nth-child(1), td:nth-child(1) { text-align: center; }
+th:nth-child(2), td:nth-child(2) { text-align: center; }
+th:nth-child(3), td:nth-child(3) { text-align: left; }
+th:nth-child(4), td:nth-child(4) { text-align: center; }
+th:nth-child(5), td:nth-child(5) { text-align: right; }
+th:nth-child(6), td:nth-child(6) { text-align: center; }
+
+tbody > tr:nth-child(even) { background-color: #0000; }
+tbody > tr:nth-child(odd) { background-color: #0001; }
+
+input {
+	font-family: Monaco, DejaVu Sans Mono, Lucida Console, Andale Mono, monospace;
+	flex-grow: 0;
+}
+.input-group.auto input {
+	flex: 0 1 auto;
+	width: auto;
+}
+
+</style>
+</head>
+<body>
+
+<form class="input-group auto mb-3" onsubmit="return sendSearch(this)">
+	<input type="text" class="form-control" id="input-user" placeholder="Player ID…" size="32">
+	<div class="input-group-append">
+		<button type="submit" class="btn btn-primary" id="btn-search">Search</button>
+	</div>
+</form>
+
+<table>
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Date</th>
+			<th>Size</th>
+			<th>Duration</th>
+		</tr>
+	</thead>
+	<tbody id="table">
+	</tbody>
+</table>
+
+<script type="text/javascript">
+
+var LOCAL_URL = "/";
+if ( window.location.href.startsWith('file://') )
+	LOCAL_URL = "http://localhost:8080/";
+
+var DATA_URL = LOCAL_URL + "utreplays-data";
+
+window.addEventListener("DOMContentLoaded", function() {
+	sendSearch();
+});
+
+function sendSearch() {
+	try {
+		document.getElementById('btn-search').disabled = 1;
+
+		var url = DATA_URL;
+
+		var user = document.getElementById('input-user').value;
+		if ( user )
+			url += "?user=" + encodeURIComponent(user);
+
+		fetch(url)
+		.then(function(res) { return res.json(); })
+		.then(receiveData)
+		.catch(function(err) {
+			console.log(err);
+			alert("Request error\n" + JSON.stringify(err) + "\nMake sure ReplayServer.js is running !");
+		});
+	}
+	catch(err) {
+		console.error(err);
+		alert("An error happened\n" + JSON.stringify(err));
+		document.getElementById('btn-search').disabled = 0;
+	}
+	return false;
+}
+
+function receiveData(data) {
+	var html = "";
+
+	var idx = 0;
+	for ( var replay of data.replays ) {
+		// Skip live replays
+		if ( replay.bIsLive )
+			continue;
+
+		html += '<tr>'
+				+ '<td>' + (++idx) + '</td>'
+				+ '<td>' + replay.SessionName + '</td>'
+				+ '<td>' + replay.FriendlyName + '</td>'
+				+ '<td>' + formatDateTime(replay.Timestamp) + '</td>'
+				+ '<td>' + formatSize(replay.SizeInBytes) + '</td>'
+				+ '<td>' + formatDuration(replay.DemoTimeInMS) + '</td>'
+			+ '</tr>';
+	}
+
+	document.getElementById('table').innerHTML = html;
+
+	if ( data.replays.length == 0 )
+		alert("Zero results !");
+
+	document.getElementById('btn-search').disabled = 0;
+}
+
+function formatDateTime(d) {
+	return (new Date(d)).toLocaleString();
+}
+function formatSize(b) {
+	var mb = b/1000000;
+	return mb.toFixed(1) + "&nbsp;mb";
+}
+function formatDuration(ms) {
+	var s = Math.round(ms/1000);
+	var m = Math.floor(s/60);
+	s -= 60*m;
+	return (m<10 ? "0" : "") + m + ":" + (s<10 ? "0" : "") + s;
+}
+
+</script>
+</body>
+</html>
