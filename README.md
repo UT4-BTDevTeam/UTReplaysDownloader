@@ -21,11 +21,11 @@ That's it. Upon completion, replay files will be located in `Replays/<REPLAY_ID>
 ## Finding the replay ID
 
 UT does not tell you replay IDs.
-You can use the provided minimal web page UTReplays.html to view a the list of replays, as if you were in the game replays tab, with their ID displayed.
+You can use the provided minimal web page **UTReplays.html** to view a the list of replays, as if you were in the game replays tab, with their ID displayed.
 
 Due to security issues, the minimal web page cannot call UT servers on its own. You have to run the local streaming server for it to function. Use a separate command prompt and run `node ReplayServer.js` to launch the streaming server.
 
-Once server is running, you can double click UTReplays.html to open it in browser, and UT replays should appear.
+Once server is running, you can double click **UTReplays.html** to open it in browser, and UT replays should appear.
 
 UT replays API will only return a max of 500 replays. With no filter that's about only one day of matches.
 You can filter by player ID like you do ingame, and it does not require that player to be in your friends list. This way you can retrieve much older replays, up to one month old. UT servers do not keep replays any longer.
@@ -46,4 +46,4 @@ ServerURL="http://localhost:8080/replay/"
 ```
 Now you can run the game normally. The Watch tab should list your downloaded replays instead of UT replays, and they can be played normally.
 
-To go back to using default Epic server, simply invalidate the config by changing the section name `[NetworkReplayStreaming]` with gibberish like for example `[NetworkReplayStreamingAAA]`.
+To go back to using default Epic's replay servers, simply invalidate the config by changing the section name `[NetworkReplayStreaming]` with gibberish like for example `[NetworkReplayStreamingAAA]`.
