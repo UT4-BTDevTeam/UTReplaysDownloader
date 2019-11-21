@@ -25,7 +25,7 @@ That's it. Upon completion, replay files will be located in `Replays/<REPLAY_ID>
 UT does not tell you replay IDs.
 You can use the provided minimal web page **UTReplays.html** to view a the list of replays, as if you were in the game replays tab, with their ID displayed.
 
-Due to security issues, the minimal web page cannot call UT servers on its own. You have to run the local streaming server for it to function. Use a separate command prompt and run `node ReplayServer.js` to launch the streaming server.
+Due to security issues, the minimal web page cannot fetch from UT servers on its own. You have to run the local streaming server for it to function. Use a separate command prompt and run `node ReplayServer.js` to launch the streaming server.
 
 Once server is running, you can double click **UTReplays.html** to open it in browser, and UT replays should appear.
 
