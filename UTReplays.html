@@ -98,7 +98,8 @@ function sendSearch() {
 		.catch(function(err) {
 			console.log(err);
 			alert("Request error\n" + JSON.stringify(err) + "\nMake sure ReplayServer.js is running !");
-		});
+		})
+		.then(function() { document.getElementById('btn-search').disabled = 0; });
 	}
 	catch(err) {
 		console.error(err);
@@ -131,8 +132,6 @@ function receiveData(data) {
 
 	if ( data.replays.length == 0 )
 		alert("Zero results !");
-
-	document.getElementById('btn-search').disabled = 0;
 }
 
 function formatDateTime(d) {
