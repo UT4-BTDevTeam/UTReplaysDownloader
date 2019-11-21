@@ -105,7 +105,9 @@ function reloadLocalReplays() {
 		});
 	});
 }
-setTimeout(reloadLocalReplays);
+setTimeout(_ => {
+	reloadLocalReplays().catch(err => console.error(err));
+});
 
 server.get('/replay/replay', function(req, res) {
 	return reloadLocalReplays().then(replays => res.json({

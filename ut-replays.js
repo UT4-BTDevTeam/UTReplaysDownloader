@@ -187,6 +187,13 @@ class RemoteReplay {
 		});
 	}
 
+	CheckExists() {
+		return this.DownloadListInfo().then(data => {
+			if ( !data )
+				throw new Error("Replay does not exist !");
+		});
+	}
+
 	DownloadAllMetadata() {
 		var promises = [ mkdir2(this.localDirPath) ];
 		if ( !this.listInfo )
