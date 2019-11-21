@@ -56,6 +56,7 @@ class RemoteReplay {
 		this.id = replayId;
 		this.localDirPath = path.join(REPLAYS_FOLDER, replayId);
 
+		this.listInfo = null;
 		this.header = null;
 		this.startInfo = null;
 		this.checkpoints = null;
@@ -64,6 +65,11 @@ class RemoteReplay {
 		this.headerBuffer = null;
 	}
 
+	DownloadListInfoURL() {
+		// this seems to work to get the EnumerateStreams URL to return only this specific replay,
+		// so we can fetch info that only shows up there, such as Timestamp and SizeInBytes.
+		return ProdURL + "replay?user=" + this.id;	
+	}
 	DownloadHeaderURL() {
 		return ProdURL + "replay/" + this.id + "/file/replay.header";
 	}
@@ -78,6 +84,18 @@ class RemoteReplay {
 	}
 	DownloadChunkURL(chunkIndex) {
 		return ProdURL + "replay/" + this.id + "/file/stream." + chunkIndex;
+	}
+
+	DownloadListInfo() {
+		console.log("Retrieving listing info");
+		return promiseRequest({
+			url: this.DownloadListInfoURL(),
+			method: 'GET',
+			json: true,
+		}).then(res => {
+			this.listInfo = res.body.replays[0];
+			return this.listInfo;
+		});
 	}
 
 	DownloadHeader() {
@@ -171,6 +189,8 @@ class RemoteReplay {
 
 	DownloadAllMetadata() {
 		var promises = [ mkdir2(this.localDirPath) ];
+		if ( !this.listInfo )
+			promises.push( this.DownloadListInfo() );
 		if ( !this.header )
 			promises.push( this.DownloadHeader() );
 		if ( !this.startInfo )
@@ -181,6 +201,7 @@ class RemoteReplay {
 		return Promise.all(promises)
 		.then(_ => {
 			return util.promisify(fs.writeFile)(path.join(this.localDirPath, 'metadata.json'), JSON.stringify({
+				listInfo: this.listInfo,
 				header: this.header,
 				startInfo: this.startInfo,
 				checkpoints: this.checkpoints,
@@ -249,6 +270,7 @@ class LocalReplay {
 			util.promisify(fs.readFile)(path.join(this.localDirPath, 'metadata.json'), 'utf8')
 			.then(jsonString => {
 				var data = JSON.parse(jsonString);
+				this.listInfo = data.listInfo;
 				this.header = data.header;
 				this.startInfo = data.startInfo;
 				this.checkpoints = data.checkpoints;

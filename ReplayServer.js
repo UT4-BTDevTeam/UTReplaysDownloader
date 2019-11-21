@@ -107,23 +107,9 @@ function reloadLocalReplays() {
 }
 setTimeout(reloadLocalReplays);
 
-// Replays enumeration - we don't have all the required data here
-// But it doesn't matter because Replays panel doesn't work in local mode anyways.
 server.get('/replay/replay', function(req, res) {
 	return reloadLocalReplays().then(replays => res.json({
-		replays: replays.map(replay => ({
-			bIsLive: false,
-			shouldKeep: false,
-			totalViews: 0,
-			AppName: "unrealtournament",
-			SessionName: replay.id,
-			FriendlyName: replay.id,
-			Timestamp: (new Date()).toISOString(),	//TODO
-			SizeInBytes: 1000,						//TODO
-			DemoTimeInMS: replay.startInfo.time,
-			NumViewers: 0,
-			Changelist: replay.header.Changelist,
-		}))
+		replays: replays.map(replay => replay.listInfo)
 	}))
 	.catch(err => commonErrorHandler(err, res));
 });
