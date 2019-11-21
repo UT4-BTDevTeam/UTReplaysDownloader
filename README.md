@@ -6,6 +6,8 @@ Install nodejs.
 
 Install dependencies by running `npm install` in folder.
 
+WIP: working to package a runtime that doesn't require any installation.
+
 ## Downloading replays
 
 Run the downloader script with the following command :
@@ -32,7 +34,7 @@ You can filter by player ID like you do ingame, and it does not require that pla
 
 ## Viewing replays
 
-First you need to run the local replay streaming server, if it's not already running. Open a separate command prompt and execute :
+First you need to run the local replay streaming server, if it's not already running. Open a separate command prompt (or powershell) and execute :
 ```
 node ReplayServer.js
 ```
