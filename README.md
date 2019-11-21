@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-Install nodejs.
+### The easy way
+Download a [portable release](https://github.com/UT4-BTDevTeam/UTReplaysDownloader/releases).
 
-Install dependencies by running `npm install` in folder.
-
-WIP: working to package a runtime that doesn't require any installation.
+### The hard way
+If you choose to clone/download the repository, you will have to install **nodejs** and run `npm install` in the folder in order to install dependencies. Alternatively you can grab the portable runtime (node.exe + node_modules) from a release and place it in repository folder.
 
 ## Downloading replays
 
