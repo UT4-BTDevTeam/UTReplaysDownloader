@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-Install nodejs.
+### The easy way
+Download a [portable release](https://github.com/UT4-BTDevTeam/UTReplaysDownloader/releases).
 
-Install dependencies by running `npm install` in folder.
-
-WIP: working to package a runtime that doesn't require any installation.
+### The hard way
+If you choose to clone/download the repository, you will have to install **nodejs** and run `npm install` in the folder in order to install dependencies. Alternatively you can grab the portable runtime (node.exe + node_modules) from a release and place it in repository folder.
 
 ## Downloading replays
 
@@ -25,7 +25,7 @@ That's it. Upon completion, replay files will be located in `Replays/<REPLAY_ID>
 UT does not tell you replay IDs.
 You can use the provided minimal web page **UTReplays.html** to view a the list of replays, as if you were in the game replays tab, with their ID displayed.
 
-Due to security issues, the minimal web page cannot call UT servers on its own. You have to run the local streaming server for it to function. Use a separate command prompt and run `node ReplayServer.js` to launch the streaming server.
+Due to security issues, the minimal web page cannot fetch from UT servers on its own. You have to run the local streaming server for it to function. Use a separate command prompt and run `node ReplayServer.js` to launch the streaming server.
 
 Once server is running, you can double click **UTReplays.html** to open it in browser, and UT replays should appear.
 
