@@ -4,7 +4,15 @@ const fs = require('fs');
 const util = require('util');
 
 const request = require('request');
-const promiseRequest = util.promisify(request);
+const promiseRequest1 = util.promisify(request);
+function promiseRequest() {
+	return promiseRequest1.apply(this, arguments).then(res => {
+		if (res.statusCode >= 400)
+			throw new Error(res.statusCode+" "+res.statusMessage);
+		else
+			return res;
+	});
+}
 
 const UEUtils = require('./ue-utils.js');
 
