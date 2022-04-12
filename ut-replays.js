@@ -22,7 +22,7 @@ const UEUtils = require('./ue-utils.js');
 
 const REPLAYS_FOLDER = path.resolve('Replays');
 
-const ProdURL = "https://replayserver.azurewebsites.net/replay";
+const ProdURL = "https://replayserver.azurewebsites.net/";
 
 const EnumerateStreamsURL = ProdURL + "replay";
 
