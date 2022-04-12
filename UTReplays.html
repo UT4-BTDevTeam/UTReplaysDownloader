@@ -110,27 +110,29 @@ function sendSearch() {
 }
 
 function receiveData(data) {
+	normalizeObjectCasing(data);
+
 	var html = "";
 
 	var idx = 0;
-	for ( var replay of data.replays ) {
+	for ( var replay of data.REPLAYS ) {
 		// Skip live replays
-		if ( replay.bIsLive )
+		if ( replay.BISLIVE )
 			continue;
 
 		html += '<tr>'
 				+ '<td>' + (++idx) + '</td>'
-				+ '<td>' + replay.SessionName + '</td>'
-				+ '<td>' + replay.FriendlyName + '</td>'
-				+ '<td>' + formatDateTime(replay.Timestamp) + '</td>'
-				+ '<td>' + formatSize(replay.SizeInBytes) + '</td>'
-				+ '<td>' + formatDuration(replay.DemoTimeInMS) + '</td>'
+				+ '<td>' + replay.SESSIONNAME + '</td>'
+				+ '<td>' + replay.FRIENDLYNAME + '</td>'
+				+ '<td>' + formatDateTime(replay.TIMESTAMP) + '</td>'
+				+ '<td>' + formatSize(replay.SIZEINBYTES) + '</td>'
+				+ '<td>' + formatDuration(replay.DEMOTIMEINMS) + '</td>'
 			+ '</tr>';
 	}
 
 	document.getElementById('table').innerHTML = html;
 
-	if ( data.replays.length == 0 )
+	if ( data.REPLAYS.length == 0 )
 		alert("Zero results !");
 }
 
@@ -146,6 +148,23 @@ function formatDuration(ms) {
 	var m = Math.floor(s/60);
 	s -= 60*m;
 	return (m<10 ? "0" : "") + m + ":" + (s<10 ? "0" : "") + s;
+}
+
+function normalizeObjectCasing(obj) {
+	if (obj && typeof(obj) == 'object') {
+		if (obj instanceof Array) {
+			for (var v of obj)
+				normalizeObjectCasing(v);
+		}
+		else {
+			for (var k in obj) {
+				var v = obj[k];
+				delete obj[k];
+				obj[k.toUpperCase()] = v;
+				normalizeObjectCasing(v);
+			}
+		}
+	}
 }
 
 </script>
