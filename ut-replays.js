@@ -22,7 +22,7 @@ const UEUtils = require('./ue-utils.js');
 
 const REPLAYS_FOLDER = path.resolve('Replays');
 
-const ProdURL = "https://utreplay-public-service-prod10.ol.epicgames.com/replay/v2/";
+const ProdURL = "https://replayserver.azurewebsites.net/";
 
 const EnumerateStreamsURL = ProdURL + "replay";
 
